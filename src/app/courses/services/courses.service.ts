@@ -17,7 +17,7 @@ export class CoursesService {
     return this.httpClient.get<Course[]>(this.API)
     .pipe(
       first(), //fala pro rxjs que assim que vem a primeira resposta pode se desinscrever do observable
-      delay(5000),
+      //delay(5000),
       tap(courses => console.log(courses))
     );
   }
