@@ -7,6 +7,13 @@
     o nome e a categoria,
     não precisa do id-->
 
+
+    <!--Mas vou colocar coluna do ID agora para fazer um teste-->
+    <ng-container matColumnDef="_id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let course">{{ course._id }}</td>
+    </ng-container>
+
       <!-- Name Column -->
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Nome do curso</th>
