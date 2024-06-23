@@ -1,0 +1,14 @@
+mat-card{
+  max-width: 80%;
+  margin: 2em auto; //margem 2x a padrão
+  text-align: center;
+}
+
+.full-width{
+  width: 100%;
+}
+
+.min-width{ //eu sempre vou ter um tamanho mínimo
+  width: 100%;
+  min-width: 150px;
+}
