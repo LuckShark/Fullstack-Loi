@@ -20,7 +20,7 @@ export class CoursesService {
     .pipe(
       first(), //fala pro rxjs que assim que vem a primeira resposta pode se desinscrever do observable
       //delay(5000),
-      tap(courses => console.log(courses))
+      //tap(courses => console.log(courses))
     );
   }
 
@@ -29,6 +29,20 @@ export class CoursesService {
   }
 
   save(record: Partial<Course>) {
+    console.log(record);
+    if (record._id){
+      //console.log('teve um update');
+      return this.update(record);
+    }
+    //console.log('teve um create');
+    return this.create(record);
+  }
+
+  private create(record: Partial<Course>){
     return this.httpClient.post<Course>(this.API, record).pipe(first());
+  }
+
+  private update(record: Partial<Course>){
+    return this.httpClient.put<Course>(`${this.API}/${record._id}`, record).pipe(first());
   }
 }
