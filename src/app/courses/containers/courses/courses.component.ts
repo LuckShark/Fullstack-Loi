@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { ErrorDialogComponent } from 'src/app/shared/components/error-dialog/error-dialog.component';
 
 import { Course } from '../../model/course';
 import { CoursesService } from '../../services/courses.service';
-import { ErrorDialogComponent } from 'src/app/shared/components/error-dialog/error-dialog.component';
-import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class CoursesComponent implements OnInit {
 
-  courses$: Observable<Course[]>;
+  courses$: Observable<Course[]> | null = null;
   // courses: Course[] = [];
 
 
@@ -26,9 +27,13 @@ export class CoursesComponent implements OnInit {
     private coursesService: CoursesService,
     public dialog: MatDialog,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private snackBar: MatSnackBar
   ) {
- // this.coursesService = new CoursesService();
+    this.refresh();
+  }
+
+  refresh() {
     this.courses$ = this.coursesService.list()
     .pipe(
       catchError(error => {
@@ -53,7 +58,21 @@ export class CoursesComponent implements OnInit {
   }
 
   onEdit(course: Course) {
-    this.router.navigate(['edit', course._id], {relativeTo: this.route}); 
+    this.router.navigate(['edit', course._id], {relativeTo: this.route});
+  }
+
+  onRemove(course: Course) {
+    this.coursesService.remove(course._id).subscribe(
+       () => {
+        this.refresh();
+        this.snackBar.open('Curso removido com sucesso!', 'X', {
+          duration: 5000,
+          verticalPosition: 'top',
+          horizontalPosition: 'center'
+        });
+      },
+      () => this.onError('Erro ao tentar remover curso'),
+    );
   }
 
 }
